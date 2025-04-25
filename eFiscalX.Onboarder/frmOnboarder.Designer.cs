@@ -30,6 +30,8 @@
         {
             tabControl = new TabControl();
             tabOnboarding = new TabPage();
+            rdbProdEnv = new RadioButton();
+            rdbTestEnv = new RadioButton();
             lblTitle = new Label();
             txtNui = new TextBox();
             txtFiscalizationNo = new TextBox();
@@ -68,6 +70,8 @@
             // 
             // tabOnboarding
             // 
+            tabOnboarding.Controls.Add(rdbProdEnv);
+            tabOnboarding.Controls.Add(rdbTestEnv);
             tabOnboarding.Controls.Add(lblTitle);
             tabOnboarding.Controls.Add(txtNui);
             tabOnboarding.Controls.Add(txtFiscalizationNo);
@@ -87,6 +91,28 @@
             tabOnboarding.Size = new Size(1204, 541);
             tabOnboarding.TabIndex = 0;
             tabOnboarding.Text = "Onboarding";
+            // 
+            // rdbProdEnv
+            // 
+            rdbProdEnv.AutoSize = true;
+            rdbProdEnv.Location = new Point(382, 314);
+            rdbProdEnv.Name = "rdbProdEnv";
+            rdbProdEnv.Size = new Size(96, 24);
+            rdbProdEnv.TabIndex = 15;
+            rdbProdEnv.Text = "PROD Env";
+            rdbProdEnv.UseVisualStyleBackColor = true;
+            // 
+            // rdbTestEnv
+            // 
+            rdbTestEnv.AutoSize = true;
+            rdbTestEnv.Checked = true;
+            rdbTestEnv.Location = new Point(253, 314);
+            rdbTestEnv.Name = "rdbTestEnv";
+            rdbTestEnv.Size = new Size(89, 24);
+            rdbTestEnv.TabIndex = 14;
+            rdbTestEnv.TabStop = true;
+            rdbTestEnv.Text = "TEST Env";
+            rdbTestEnv.UseVisualStyleBackColor = true;
             // 
             // lblTitle
             // 
@@ -184,7 +210,7 @@
             btnReset.BackColor = Color.Orange;
             btnReset.FlatStyle = FlatStyle.Flat;
             btnReset.ForeColor = Color.White;
-            btnReset.Location = new Point(503, 412);
+            btnReset.Location = new Point(488, 389);
             btnReset.Name = "btnReset";
             btnReset.Size = new Size(125, 40);
             btnReset.TabIndex = 11;
@@ -197,7 +223,7 @@
             btnOnboard.BackColor = Color.DodgerBlue;
             btnOnboard.FlatStyle = FlatStyle.Flat;
             btnOnboard.ForeColor = Color.White;
-            btnOnboard.Location = new Point(634, 412);
+            btnOnboard.Location = new Point(634, 389);
             btnOnboard.Name = "btnOnboard";
             btnOnboard.Size = new Size(125, 40);
             btnOnboard.TabIndex = 12;
@@ -207,13 +233,12 @@
             // 
             // lblStatus
             // 
-            lblStatus.AutoSize = true;
             lblStatus.ForeColor = Color.Green;
-            lblStatus.Location = new Point(394, 332);
+            lblStatus.Location = new Point(8, 444);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(160, 20);
+            lblStatus.Size = new Size(1188, 33);
             lblStatus.TabIndex = 13;
-            lblStatus.Text = "Signing CSR Successful";
+            lblStatus.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tabCertificate
             // 
@@ -298,5 +323,7 @@
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel tsslName;
         private ToolStripStatusLabel toolStripStatusLabel2;
+        private RadioButton rdbProdEnv;
+        private RadioButton rdbTestEnv;
     }
 }
