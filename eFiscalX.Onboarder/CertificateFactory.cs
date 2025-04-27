@@ -10,18 +10,28 @@ namespace eFiscalX.Onboarder
 {
     public class CertificateFactory
     {
-        public ECDsa GenerateEcdsaKey()
+        private ECDsa GenerateEcdsaKey()
         {
             return ECDsa.Create(ECCurve.NamedCurves.nistP256);
         }
 
-        public byte[] CreateCertificateSigningRequest(ECDsa ecdsaKey, CsrRequest model)
+        public (ECDsa PrivateKey, byte[] CsrBytes) CreateCertificateSigningRequest(CsrRequest model)
         {
+            // 1. Generate an ECDSA P-256 private key (exportable)
+            var ecdsaKey = GenerateEcdsaKey();
+
+            // 2. Build Distinguished Name (DN)
             string dn = $"C=RKS, O={model.BusinessId}, OU={model.PosId}, L={model.BranchId}, CN={model.BusinessName}";           
             var distinguishedName = new X500DistinguishedName(dn);
+            
+            // 3. Create CertificateRequest with ECDSA key
+            var csrRequest = new CertificateRequest(distinguishedName, ecdsaKey, HashAlgorithmName.SHA256);
 
-            var request = new CertificateRequest(distinguishedName, ecdsaKey, HashAlgorithmName.SHA256);
-            return request.CreateSigningRequest();
+            // 4. Create CSR bytes
+            var csrBytes = csrRequest.CreateSigningRequest();
+
+            // 5. Return both private key and CSR
+            return (ecdsaKey, csrBytes);
         }
 
         public void SaveCsrToPem(string filePath, byte[] csrBytes)

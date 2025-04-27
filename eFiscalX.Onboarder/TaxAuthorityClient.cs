@@ -55,7 +55,7 @@ namespace eFiscalX.Onboarder
 
             if (!_isProductionEnv)
             {
-                url = $"https://fiskalizimi.atk-ks.org/ca/signcsr";
+                url = $"https://fiskalizimi-test.atk-ks.org/ca/signcsr";
             }
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, request);

@@ -32,9 +32,8 @@ namespace eFiscalX.Onboarder
                 var verificationCode = await taxAuthorityClient.GetVerificationCodeAsync(onBoardModel);
                 MessageBox.Show($"Verification Code: {verificationCode.VerificationCode}, Business: {verificationCode.BusinessName}");
 
-                // Step 1: Generate ECDSA P-256 Key
+                // Step 1: Initialize CertificateFactory
                 var factory = new CertificateFactory();
-                using var ecdsa = factory.GenerateEcdsaKey();
 
                 // Step 2: Create CSR
                 var csrRequest = new CsrRequest
@@ -46,11 +45,11 @@ namespace eFiscalX.Onboarder
                     PosId = onBoardModel.PosId,
                 };
 
-                var csrBytes = factory.CreateCertificateSigningRequest(ecdsa, csrRequest);
+                var (privateKey, csrBytes) = factory.CreateCertificateSigningRequest(csrRequest);
 
                 // Step 3: Save CSR and Private Key
                 factory.SaveCsrToPem($"{csrRequest.BusinessId}_csr.pem", csrBytes);
-                factory.SavePrivateKeyToPem($"{csrRequest.BusinessId}private_key.pem", ecdsa);
+                factory.SavePrivateKeyToPem($"{csrRequest.BusinessId}private_key.pem", privateKey);
 
                 Console.WriteLine("CSR and private key generated using ECDSA P-256.");
 

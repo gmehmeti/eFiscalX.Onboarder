@@ -58,12 +58,14 @@
             // 
             // tabControl
             // 
+            tabControl.Appearance = TabAppearance.FlatButtons;
             tabControl.Controls.Add(tabOnboarding);
             tabControl.Controls.Add(tabCertificate);
             tabControl.Controls.Add(tabSignature);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
+            tabControl.Padding = new Point(50, 3);
             tabControl.SelectedIndex = 0;
             tabControl.Size = new Size(1212, 574);
             tabControl.TabIndex = 0;
@@ -86,9 +88,9 @@
             tabOnboarding.Controls.Add(btnReset);
             tabOnboarding.Controls.Add(btnOnboard);
             tabOnboarding.Controls.Add(lblStatus);
-            tabOnboarding.Location = new Point(4, 29);
+            tabOnboarding.Location = new Point(4, 32);
             tabOnboarding.Name = "tabOnboarding";
-            tabOnboarding.Size = new Size(1204, 541);
+            tabOnboarding.Size = new Size(1204, 538);
             tabOnboarding.TabIndex = 0;
             tabOnboarding.Text = "Onboarding";
             // 
@@ -242,17 +244,17 @@
             // 
             // tabCertificate
             // 
-            tabCertificate.Location = new Point(4, 29);
+            tabCertificate.Location = new Point(4, 32);
             tabCertificate.Name = "tabCertificate";
-            tabCertificate.Size = new Size(1204, 541);
+            tabCertificate.Size = new Size(1204, 538);
             tabCertificate.TabIndex = 1;
             tabCertificate.Text = "Certificate";
             // 
             // tabSignature
             // 
-            tabSignature.Location = new Point(4, 29);
+            tabSignature.Location = new Point(4, 32);
             tabSignature.Name = "tabSignature";
-            tabSignature.Size = new Size(1204, 541);
+            tabSignature.Size = new Size(1204, 538);
             tabSignature.TabIndex = 2;
             tabSignature.Text = "Signature";
             // 
