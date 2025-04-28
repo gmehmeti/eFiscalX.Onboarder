@@ -15,6 +15,8 @@ namespace eFiscalX.Onboarder
             if (!ValidateAllFields())
                 return;
 
+            this.lblTitle.Text = lblStatus.Text = string.Empty;
+
             bool isProdEnv = rdbProdEnv.Checked;
             var onBoardRequest = new OnboardRequest
             {
@@ -32,6 +34,7 @@ namespace eFiscalX.Onboarder
             {
                 var verificationCode = await taxAuthorityClient.GetVerificationCodeAsync(onBoardRequest);
                 LogMessage($"Verification Code: {verificationCode.VerificationCode}, Business: {verificationCode.BusinessName}");
+                lblTitle.Text = verificationCode.BusinessName;
 
                 // Step 1: Initialize CertificateFactory
                 var certFactory = new CertificateFactory();
@@ -68,6 +71,9 @@ namespace eFiscalX.Onboarder
 
                 certFactory.SaveSignedCertificatePfx($"{onBoardRequest.NUI}_signed_certificate.pem", privateKeyPem, signedCert.SignedCertificate);
                 LogMessage($"Exported signed certificate and private key to PFX.");
+                
+                lblStatus.Text = "Fiscalization onboarding finalized";
+
             }
             catch (Exception ex)
             {
