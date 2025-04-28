@@ -11,6 +11,11 @@ namespace eFiscalX.Onboarder
 {
     public class CertificateFactory
     {
+        private string certificatesFolder = "";
+        public CertificateFactory()
+        {
+            certificatesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Certificates");
+        }
         private ECDsa GenerateEcdsaKey()
         {
             return ECDsa.Create(ECCurve.NamedCurves.nistP256);
@@ -41,18 +46,21 @@ namespace eFiscalX.Onboarder
 
         private void SaveCsrToPem(string filePath, string csrPem)
         {
-            File.WriteAllText(filePath, csrPem);
+            var fileName = Path.Combine(certificatesFolder, filePath);
+            File.WriteAllText(fileName, csrPem);
         }
         private string SavePrivateKeyToPem(string filePath, ECDsa ecdsaKey)
         {
             string privateKeyPem = ecdsaKey.ExportECPrivateKeyPem();
-            File.WriteAllText(filePath, privateKeyPem);
+            var fileName = Path.Combine(certificatesFolder, filePath);
+            File.WriteAllText(fileName, privateKeyPem);
             return privateKeyPem;
         }
 
         public void SaveSignedCertificate(string filePath, string signedCert)
         {
-            File.WriteAllText(filePath, signedCert);
+            var fileName = Path.Combine(certificatesFolder, filePath);
+            File.WriteAllText(fileName, signedCert);
         }
 
         public void SaveSignedCertificatePfx(string filePath, string privateKeyPem, string signedCertPem)
@@ -72,7 +80,8 @@ namespace eFiscalX.Onboarder
             byte[] pfxBytes = certWithKey.Export(X509ContentType.Pfx, pfxPassword);
 
             // Save to file
-            File.WriteAllBytes(filePath, pfxBytes);
+            var fileName = Path.Combine(certificatesFolder, filePath);
+            File.WriteAllBytes(fileName, pfxBytes);
         }
 
         private ECDsa LoadPrivateKeyFromPem(string privateKeyPem)

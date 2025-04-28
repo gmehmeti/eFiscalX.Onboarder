@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
@@ -28,10 +29,14 @@ namespace eFiscalX.Onboarder
                 url = $"https://fiskalizimi-test.atk-ks.org/ca/verify/{model.NUI}";
             }
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, model);
+            string jsonBody = JsonConvert.SerializeObject(model, Formatting.Indented);
+            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+            string responseBody = await response.Content.ReadAsStringAsync();
 
+            //HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, model);
             //response.EnsureSuccessStatusCode();
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException($"Request failed with status: {response.StatusCode}, Reason: {response.ReasonPhrase}");
@@ -51,16 +56,21 @@ namespace eFiscalX.Onboarder
 
         #region SignCsrAsync
 
-        public async Task<SignCsrResponse> SignCsrAsync(SignCsrRequest request)
+        public async Task<SignCsrResponse> SignCsrAsync(SignCsrRequest requestModel)
         {
             string url = "https://fiskalizimi.atk-ks.org/ca/signcsr";
-
             if (!_isProductionEnv)
             {
                 url = $"https://fiskalizimi-test.atk-ks.org/ca/signcsr";
             }
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, request);
+            string jsonBody = JsonConvert.SerializeObject(requestModel, Formatting.Indented);
+            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            //HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, request);
+            //response.EnsureSuccessStatusCode();
 
             if (!response.IsSuccessStatusCode)
             {

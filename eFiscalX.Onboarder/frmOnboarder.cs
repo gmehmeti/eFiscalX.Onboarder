@@ -73,7 +73,6 @@ namespace eFiscalX.Onboarder
                 LogMessage($"Exported signed certificate and private key to PFX.");
                 
                 lblStatus.Text = "Fiscalization onboarding finalized";
-
             }
             catch (Exception ex)
             {
