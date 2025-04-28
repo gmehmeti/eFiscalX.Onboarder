@@ -30,6 +30,8 @@ namespace eFiscalX.Onboarder
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, model);
 
+            //response.EnsureSuccessStatusCode();
+            
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException($"Request failed with status: {response.StatusCode}, Reason: {response.ReasonPhrase}");

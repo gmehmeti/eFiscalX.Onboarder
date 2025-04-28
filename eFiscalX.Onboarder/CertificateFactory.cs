@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace eFiscalX.Onboarder
 {
@@ -15,44 +16,93 @@ namespace eFiscalX.Onboarder
             return ECDsa.Create(ECCurve.NamedCurves.nistP256);
         }
 
-        public (ECDsa PrivateKey, byte[] CsrBytes) CreateCertificateSigningRequest(CsrRequest model)
+        public (string PrivateKeyPem, string CsrPem) CreateCertificateSigningRequest(CsrRequest model)
         {
             // 1. Generate an ECDSA P-256 private key (exportable)
             var ecdsaKey = GenerateEcdsaKey();
 
             // 2. Build Distinguished Name (DN)
             string dn = $"C=RKS, O={model.BusinessId}, OU={model.PosId}, L={model.BranchId}, CN={model.BusinessName}";           
-            var distinguishedName = new X500DistinguishedName(dn);
+            var subjectName = new X500DistinguishedName(dn);
             
             // 3. Create CertificateRequest with ECDSA key
-            var csrRequest = new CertificateRequest(distinguishedName, ecdsaKey, HashAlgorithmName.SHA256);
+            var csrRequest = new CertificateRequest(subjectName, ecdsaKey, HashAlgorithmName.SHA256);
 
-            // 4. Create CSR bytes
-            var csrBytes = csrRequest.CreateSigningRequest();
+            // 4. Create CSR PEM
+            var csrPem = csrRequest.CreateSigningRequestPem();
 
-            // 5. Return both private key and CSR
-            return (ecdsaKey, csrBytes);
+            // 5: Save CSR and Private Key
+            var privateKeyPem = this.SavePrivateKeyToPem($"{model.BusinessId}_private_key.pem", ecdsaKey);
+            this.SaveCsrToPem($"{model.BusinessId}_csr.pem", csrPem);
+
+            // 6. Return both private key and CSR
+            return (privateKeyPem, csrPem);
         }
 
-        public void SaveCsrToPem(string filePath, byte[] csrBytes)
+        private void SaveCsrToPem(string filePath, string csrPem)
         {
-            string pem = ExportToPem("CERTIFICATE REQUEST", csrBytes);
-            File.WriteAllText(filePath, pem);
+            File.WriteAllText(filePath, csrPem);
         }
-        public void SavePrivateKeyToPem(string filePath, ECDsa ecdsaKey)
+        private string SavePrivateKeyToPem(string filePath, ECDsa ecdsaKey)
         {
-            var privateKeyBytes = ecdsaKey.ExportPkcs8PrivateKey();
-            string pem = ExportToPem("PRIVATE KEY", privateKeyBytes);
-            File.WriteAllText(filePath, pem);
+            string privateKeyPem = ecdsaKey.ExportECPrivateKeyPem();
+            File.WriteAllText(filePath, privateKeyPem);
+            return privateKeyPem;
         }
 
-        private string ExportToPem(string type, byte[] data)
+        public void SaveSignedCertificate(string filePath, string signedCert)
         {
-            var builder = new StringBuilder();
-            builder.AppendLine($"-----BEGIN {type}-----");
-            builder.AppendLine(Convert.ToBase64String(data, Base64FormattingOptions.InsertLineBreaks));
-            builder.AppendLine($"-----END {type}-----");
-            return builder.ToString();
+            File.WriteAllText(filePath, signedCert);
+        }
+
+        public void SaveSignedCertificatePfx(string filePath, string privateKeyPem, string signedCertPem)
+        {
+            // Load Private Key
+            ECDsa privateKey = LoadPrivateKeyFromPem(privateKeyPem);
+
+            // Load Signed Certificate
+            var certificate = LoadCertificateFromPem(signedCertPem);
+
+            // Attach Private Key to Certificate
+            var certWithKey = certificate.CopyWithPrivateKey(privateKey);
+
+            // Export to PFX
+            string pfxPassword = "Admin1!";
+
+            byte[] pfxBytes = certWithKey.Export(X509ContentType.Pfx, pfxPassword);
+
+            // Save to file
+            File.WriteAllBytes(filePath, pfxBytes);
+        }
+
+        private ECDsa LoadPrivateKeyFromPem(string privateKeyPem)
+        {
+            string base64 = ExtractPemContent(privateKeyPem, "EC PRIVATE KEY");
+            byte[] keyBytes = Convert.FromBase64String(base64);
+
+            ECDsa ecdsa = ECDsa.Create();
+            ecdsa.ImportECPrivateKey(keyBytes, out _);
+            return ecdsa;
+        }
+
+        private X509Certificate2 LoadCertificateFromPem(string signedCertPem)
+        {
+            string base64 = ExtractPemContent(signedCertPem, "CERTIFICATE");
+            byte[] certBytes = Convert.FromBase64String(base64);
+
+            return new X509Certificate2(certBytes);
+        }
+
+        private string ExtractPemContent(string pem, string section)
+        {
+            string header = $"-----BEGIN {section}-----";
+            string footer = $"-----END {section}-----";
+
+            int start = pem.IndexOf(header) + header.Length;
+            int end = pem.IndexOf(footer, start);
+
+            string base64 = pem.Substring(start, end - start);
+            return base64.Replace("\r", "").Replace("\n", "").Trim();
         }
     }
 }

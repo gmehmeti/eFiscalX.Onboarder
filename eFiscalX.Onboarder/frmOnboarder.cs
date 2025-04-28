@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace eFiscalX.Onboarder
@@ -15,7 +16,7 @@ namespace eFiscalX.Onboarder
                 return;
 
             bool isProdEnv = rdbProdEnv.Checked;
-            var onBoardModel = new OnboardRequest
+            var onBoardRequest = new OnboardRequest
             {
                 NUI = ulong.Parse(txtNui.Text.Trim()),
                 FiscalizationNo = txtFiscalizationNo.Text.Trim(),
@@ -29,45 +30,49 @@ namespace eFiscalX.Onboarder
 
             try
             {
-                var verificationCode = await taxAuthorityClient.GetVerificationCodeAsync(onBoardModel);
-                MessageBox.Show($"Verification Code: {verificationCode.VerificationCode}, Business: {verificationCode.BusinessName}");
+                var verificationCode = await taxAuthorityClient.GetVerificationCodeAsync(onBoardRequest);
+                LogMessage($"Verification Code: {verificationCode.VerificationCode}, Business: {verificationCode.BusinessName}");
 
                 // Step 1: Initialize CertificateFactory
-                var factory = new CertificateFactory();
+                var certFactory = new CertificateFactory();
 
                 // Step 2: Create CSR
                 var csrRequest = new CsrRequest
                 {
-                    BusinessId = onBoardModel.NUI,
+                    BusinessId = onBoardRequest.NUI,
                     BusinessName = verificationCode.BusinessName,
                     Country = "RKS",
-                    BranchId = onBoardModel.BranchNo,
-                    PosId = onBoardModel.PosId,
+                    BranchId = onBoardRequest.BranchNo,
+                    PosId = onBoardRequest.PosId,
                 };
 
-                var (privateKey, csrBytes) = factory.CreateCertificateSigningRequest(csrRequest);
+                var (privateKeyPem, csrPem) = certFactory.CreateCertificateSigningRequest(csrRequest);
+                LogMessage("Private Key and CSR generated successfully (ECDSA P-256).");
 
-                // Step 3: Save CSR and Private Key
-                factory.SaveCsrToPem($"{csrRequest.BusinessId}_csr.pem", csrBytes);
-                factory.SavePrivateKeyToPem($"{csrRequest.BusinessId}private_key.pem", privateKey);
-
-                Console.WriteLine("CSR and private key generated using ECDSA P-256.");
-
-                var request = new SignCsrRequest
+                var signCsrRequest = new SignCsrRequest
                 {
                     BusinessName = verificationCode.BusinessName,
-                    BusinessId = onBoardModel.NUI,
-                    BranchId = onBoardModel.BranchNo,
+                    BusinessId = onBoardRequest.NUI,
+                    BranchId = onBoardRequest.BranchNo,
                     VerificationNo = verificationCode.VerificationCode,
-                    PosId = onBoardModel.PosId,
-                    ApplicationId = onBoardModel.ApplicationId,
-                    Csr = File.ReadAllText("path/to/your/request.csr.pem")
+                    PosId = onBoardRequest.PosId,
+                    ApplicationId = onBoardRequest.ApplicationId,
+                    Csr = csrPem
                 };
 
+                var signedCert = await taxAuthorityClient.SignCsrAsync(signCsrRequest);
+                LogMessage($"Received signed certificate from Fiscalization Service.");
+
+                certFactory.SaveSignedCertificate($"{onBoardRequest.NUI}_signed_certificate.pem", signedCert.SignedCertificate);
+                LogMessage($"Saved signed certificate to PEM format.");
+
+                certFactory.SaveSignedCertificatePfx($"{onBoardRequest.NUI}_signed_certificate.pem", privateKeyPem, signedCert.SignedCertificate);
+                LogMessage($"Exported signed certificate and private key to PFX.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error: {ex.Message}");
+                LogMessage($"Error: {ex.Message}");
             }
         }
 
@@ -120,5 +125,10 @@ namespace eFiscalX.Onboarder
         }
 
         #endregion
+
+        private void LogMessage(string message)
+        {
+            this.rtxtLog.AppendText(message + Environment.NewLine);
+        }
     }
 }

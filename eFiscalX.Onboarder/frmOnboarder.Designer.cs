@@ -51,6 +51,7 @@
             statusStrip1 = new StatusStrip();
             tsslName = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
+            rtxtLog = new RichTextBox();
             tabControl.SuspendLayout();
             tabOnboarding.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -72,6 +73,7 @@
             // 
             // tabOnboarding
             // 
+            tabOnboarding.Controls.Add(rtxtLog);
             tabOnboarding.Controls.Add(rdbProdEnv);
             tabOnboarding.Controls.Add(rdbTestEnv);
             tabOnboarding.Controls.Add(lblTitle);
@@ -238,7 +240,7 @@
             lblStatus.ForeColor = Color.Green;
             lblStatus.Location = new Point(8, 444);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(1188, 33);
+            lblStatus.Size = new Size(805, 33);
             lblStatus.TabIndex = 13;
             lblStatus.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -286,6 +288,14 @@
             toolStripStatusLabel2.Size = new Size(357, 47);
             toolStripStatusLabel2.Text = "gazmendmehmeti@gmail.com";
             // 
+            // rtxtLog
+            // 
+            rtxtLog.Location = new Point(819, 87);
+            rtxtLog.Name = "rtxtLog";
+            rtxtLog.Size = new Size(366, 390);
+            rtxtLog.TabIndex = 16;
+            rtxtLog.Text = "";
+            // 
             // frmOnboarder
             // 
             ClientSize = new Size(1212, 574);
@@ -327,5 +337,6 @@
         private ToolStripStatusLabel toolStripStatusLabel2;
         private RadioButton rdbProdEnv;
         private RadioButton rdbTestEnv;
+        private RichTextBox rtxtLog;
     }
 }
