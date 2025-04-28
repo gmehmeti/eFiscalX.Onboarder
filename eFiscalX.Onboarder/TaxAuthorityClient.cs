@@ -42,7 +42,8 @@ namespace eFiscalX.Onboarder
                 throw new HttpRequestException($"Request failed with status: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
 
-            var verificationResponse = await response.Content.ReadFromJsonAsync<VerificationResponse>();
+            var verificationResponse = JsonConvert.DeserializeObject<VerificationResponse>(responseBody);
+            //var verificationResponse = await response.Content.ReadFromJsonAsync<VerificationResponse>();
 
             if (verificationResponse?.Error != null && !string.IsNullOrEmpty(verificationResponse.Error.Message))
             {
@@ -77,7 +78,8 @@ namespace eFiscalX.Onboarder
                 throw new HttpRequestException($"CSR signing failed with status: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
 
-            var result = await response.Content.ReadFromJsonAsync<SignCsrResponse>();
+            //var result = await response.Content.ReadFromJsonAsync<SignCsrResponse>();
+            var result = JsonConvert.DeserializeObject<SignCsrResponse>(responseBody);
 
             if (result == null || string.IsNullOrWhiteSpace(result.SignedCertificate))
             {

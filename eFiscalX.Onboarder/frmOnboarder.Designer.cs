@@ -30,6 +30,7 @@
         {
             tabControl = new TabControl();
             tabOnboarding = new TabPage();
+            rtxtLog = new RichTextBox();
             rdbProdEnv = new RadioButton();
             rdbTestEnv = new RadioButton();
             lblTitle = new Label();
@@ -47,13 +48,20 @@
             btnOnboard = new Button();
             lblStatus = new Label();
             tabCertificate = new TabPage();
+            label1 = new Label();
+            lblCertificate = new Label();
+            rtxtPrivateKey = new RichTextBox();
+            rtxtCertificate = new RichTextBox();
             tabSignature = new TabPage();
+            label2 = new Label();
+            rtxtSignedCertificate = new RichTextBox();
             statusStrip1 = new StatusStrip();
             tsslName = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
-            rtxtLog = new RichTextBox();
             tabControl.SuspendLayout();
             tabOnboarding.SuspendLayout();
+            tabCertificate.SuspendLayout();
+            tabSignature.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -95,6 +103,15 @@
             tabOnboarding.Size = new Size(1204, 538);
             tabOnboarding.TabIndex = 0;
             tabOnboarding.Text = "Onboarding";
+            // 
+            // rtxtLog
+            // 
+            rtxtLog.BorderStyle = BorderStyle.None;
+            rtxtLog.Location = new Point(819, 87);
+            rtxtLog.Name = "rtxtLog";
+            rtxtLog.Size = new Size(366, 390);
+            rtxtLog.TabIndex = 16;
+            rtxtLog.Text = "";
             // 
             // rdbProdEnv
             // 
@@ -237,6 +254,7 @@
             // 
             // lblStatus
             // 
+            lblStatus.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblStatus.ForeColor = Color.Green;
             lblStatus.Location = new Point(8, 444);
             lblStatus.Name = "lblStatus";
@@ -246,19 +264,83 @@
             // 
             // tabCertificate
             // 
+            tabCertificate.Controls.Add(label1);
+            tabCertificate.Controls.Add(lblCertificate);
+            tabCertificate.Controls.Add(rtxtPrivateKey);
+            tabCertificate.Controls.Add(rtxtCertificate);
             tabCertificate.Location = new Point(4, 32);
             tabCertificate.Name = "tabCertificate";
             tabCertificate.Size = new Size(1204, 538);
             tabCertificate.TabIndex = 1;
             tabCertificate.Text = "Certificate";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(616, 28);
+            label1.Name = "label1";
+            label1.Size = new Size(82, 20);
+            label1.TabIndex = 3;
+            label1.Text = "Private Key";
+            // 
+            // lblCertificate
+            // 
+            lblCertificate.AutoSize = true;
+            lblCertificate.Location = new Point(23, 28);
+            lblCertificate.Name = "lblCertificate";
+            lblCertificate.Size = new Size(134, 20);
+            lblCertificate.TabIndex = 2;
+            lblCertificate.Text = "Certificate Request";
+            // 
+            // rtxtPrivateKey
+            // 
+            rtxtPrivateKey.BorderStyle = BorderStyle.None;
+            rtxtPrivateKey.Location = new Point(616, 58);
+            rtxtPrivateKey.Name = "rtxtPrivateKey";
+            rtxtPrivateKey.Size = new Size(561, 374);
+            rtxtPrivateKey.TabIndex = 1;
+            rtxtPrivateKey.Text = "";
+            // 
+            // rtxtCertificate
+            // 
+            rtxtCertificate.BackColor = SystemColors.Window;
+            rtxtCertificate.BorderStyle = BorderStyle.None;
+            rtxtCertificate.Location = new Point(23, 58);
+            rtxtCertificate.Name = "rtxtCertificate";
+            rtxtCertificate.ReadOnly = true;
+            rtxtCertificate.Size = new Size(561, 374);
+            rtxtCertificate.TabIndex = 0;
+            rtxtCertificate.Text = "";
+            // 
             // tabSignature
             // 
+            tabSignature.Controls.Add(label2);
+            tabSignature.Controls.Add(rtxtSignedCertificate);
             tabSignature.Location = new Point(4, 32);
             tabSignature.Name = "tabSignature";
             tabSignature.Size = new Size(1204, 538);
             tabSignature.TabIndex = 2;
-            tabSignature.Text = "Signature";
+            tabSignature.Text = "Signed Certificate";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(148, 26);
+            label2.Name = "label2";
+            label2.Size = new Size(127, 20);
+            label2.TabIndex = 4;
+            label2.Text = "Signed Certificate";
+            // 
+            // rtxtSignedCertificate
+            // 
+            rtxtSignedCertificate.BackColor = SystemColors.Window;
+            rtxtSignedCertificate.BorderStyle = BorderStyle.None;
+            rtxtSignedCertificate.Location = new Point(148, 59);
+            rtxtSignedCertificate.Name = "rtxtSignedCertificate";
+            rtxtSignedCertificate.ReadOnly = true;
+            rtxtSignedCertificate.Size = new Size(897, 365);
+            rtxtSignedCertificate.TabIndex = 3;
+            rtxtSignedCertificate.Text = "";
             // 
             // statusStrip1
             // 
@@ -288,14 +370,6 @@
             toolStripStatusLabel2.Size = new Size(357, 47);
             toolStripStatusLabel2.Text = "gazmendmehmeti@gmail.com";
             // 
-            // rtxtLog
-            // 
-            rtxtLog.Location = new Point(819, 87);
-            rtxtLog.Name = "rtxtLog";
-            rtxtLog.Size = new Size(366, 390);
-            rtxtLog.TabIndex = 16;
-            rtxtLog.Text = "";
-            // 
             // frmOnboarder
             // 
             ClientSize = new Size(1212, 574);
@@ -306,6 +380,10 @@
             tabControl.ResumeLayout(false);
             tabOnboarding.ResumeLayout(false);
             tabOnboarding.PerformLayout();
+            tabCertificate.ResumeLayout(false);
+            tabCertificate.PerformLayout();
+            tabSignature.ResumeLayout(false);
+            tabSignature.PerformLayout();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -338,5 +416,11 @@
         private RadioButton rdbProdEnv;
         private RadioButton rdbTestEnv;
         private RichTextBox rtxtLog;
+        private RichTextBox rtxtPrivateKey;
+        private RichTextBox rtxtCertificate;
+        private Label label1;
+        private Label lblCertificate;
+        private Label label2;
+        private RichTextBox rtxtSignedCertificate;
     }
 }

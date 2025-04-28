@@ -16,6 +16,7 @@ namespace eFiscalX.Onboarder
                 return;
 
             this.lblTitle.Text = lblStatus.Text = string.Empty;
+            this.rtxtSignedCertificate.Text = this.rtxtCertificate.Text = this.rtxtPrivateKey.Text =  string.Empty;
 
             bool isProdEnv = rdbProdEnv.Checked;
             var onBoardRequest = new OnboardRequest
@@ -51,6 +52,9 @@ namespace eFiscalX.Onboarder
 
                 var (privateKeyPem, csrPem) = certFactory.CreateCertificateSigningRequest(csrRequest);
                 LogMessage("Private Key and CSR generated successfully (ECDSA P-256).");
+                rtxtPrivateKey.Text = privateKeyPem;
+                rtxtCertificate.Text    = csrPem;
+
 
                 var signCsrRequest = new SignCsrRequest
                 {
@@ -65,11 +69,12 @@ namespace eFiscalX.Onboarder
 
                 var signedCert = await taxAuthorityClient.SignCsrAsync(signCsrRequest);
                 LogMessage($"Received signed certificate from Fiscalization Service.");
+                rtxtSignedCertificate.Text = signedCert.SignedCertificate;
 
                 certFactory.SaveSignedCertificate($"{onBoardRequest.NUI}_signed_certificate.pem", signedCert.SignedCertificate);
                 LogMessage($"Saved signed certificate to PEM format.");
 
-                certFactory.SaveSignedCertificatePfx($"{onBoardRequest.NUI}_signed_certificate.pem", privateKeyPem, signedCert.SignedCertificate);
+                certFactory.SaveSignedCertificatePfx($"{onBoardRequest.NUI}_signed_certificate.pfx", privateKeyPem, signedCert.SignedCertificate);
                 LogMessage($"Exported signed certificate and private key to PFX.");
                 
                 lblStatus.Text = "Fiscalization onboarding finalized";
