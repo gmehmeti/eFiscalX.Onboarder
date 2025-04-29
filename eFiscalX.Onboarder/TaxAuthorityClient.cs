@@ -33,17 +33,16 @@ namespace eFiscalX.Onboarder
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(url, content);
             string responseBody = await response.Content.ReadAsStringAsync();
+            var verificationResponse = JsonConvert.DeserializeObject<VerificationResponse>(responseBody);
 
             //HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, model);
             //response.EnsureSuccessStatusCode();
+            //var verificationResponse = await response.Content.ReadFromJsonAsync<VerificationResponse>();
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException($"Request failed with status: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
-
-            var verificationResponse = JsonConvert.DeserializeObject<VerificationResponse>(responseBody);
-            //var verificationResponse = await response.Content.ReadFromJsonAsync<VerificationResponse>();
 
             if (verificationResponse?.Error != null && !string.IsNullOrEmpty(verificationResponse.Error.Message))
             {
@@ -69,20 +68,21 @@ namespace eFiscalX.Onboarder
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(url, content);
             string responseBody = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SignCsrResponse>(responseBody);
 
             //HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, request);
+            //var result = await response.Content.ReadFromJsonAsync<SignCsrResponse>();
             //response.EnsureSuccessStatusCode();
 
             if (!response.IsSuccessStatusCode)
             {
+                result.Error += $"\nCSR signing failed with status: {response.StatusCode}, Reason: {response.ReasonPhrase}";
                 throw new HttpRequestException($"CSR signing failed with status: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
 
-            //var result = await response.Content.ReadFromJsonAsync<SignCsrResponse>();
-            var result = JsonConvert.DeserializeObject<SignCsrResponse>(responseBody);
-
             if (result == null || string.IsNullOrWhiteSpace(result.SignedCertificate))
             {
+                result.Error += $"\"CSR signing failed: Empty or invalid response.";
                 throw new Exception("CSR signing failed: Empty or invalid response.");
             }
 

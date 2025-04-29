@@ -36,6 +36,7 @@ namespace eFiscalX.Onboarder
 
         [JsonProperty("error")]
         public Error Error { get; set; }
+        public bool IsSuccess => string.IsNullOrEmpty(this.Error?.Message);
     }
 
     public class Error
@@ -75,6 +76,10 @@ namespace eFiscalX.Onboarder
     {
         [JsonProperty("signed_certificate")]
         public string SignedCertificate { get; set; }
+
+        [JsonProperty("error")]
+        public string Error { get; set; }
+        public bool IsSuccess => string.IsNullOrEmpty(this.Error);
     }
 
     public class CsrRequest
