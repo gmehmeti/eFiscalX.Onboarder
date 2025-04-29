@@ -18,7 +18,7 @@ namespace eFiscalX.Onboarder
         [JsonProperty("pos_id")]
         public ulong PosId { get; set; }
 
-        [JsonProperty("branch_id")]
+        [JsonProperty("branch_no")]
         public ulong BranchId { get; set; }
 
         [JsonProperty("application_id")]

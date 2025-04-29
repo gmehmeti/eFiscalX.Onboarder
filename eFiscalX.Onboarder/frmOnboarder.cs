@@ -55,7 +55,6 @@ namespace eFiscalX.Onboarder
                 rtxtPrivateKey.Text = privateKeyPem;
                 rtxtCertificate.Text    = csrPem;
 
-
                 var signCsrRequest = new SignCsrRequest
                 {
                     BusinessName = verificationCode.BusinessName,

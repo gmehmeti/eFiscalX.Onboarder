@@ -33,7 +33,7 @@ namespace eFiscalX.Onboarder
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(url, content);
             string responseBody = await response.Content.ReadAsStringAsync();
-            var verificationResponse = JsonConvert.DeserializeObject<VerificationResponse>(responseBody);
+            
 
             //HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, model);
             //response.EnsureSuccessStatusCode();
@@ -43,6 +43,8 @@ namespace eFiscalX.Onboarder
             {
                 throw new HttpRequestException($"Request failed with status: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
+
+            var verificationResponse = JsonConvert.DeserializeObject<VerificationResponse>(responseBody);
 
             if (verificationResponse?.Error != null && !string.IsNullOrEmpty(verificationResponse.Error.Message))
             {
