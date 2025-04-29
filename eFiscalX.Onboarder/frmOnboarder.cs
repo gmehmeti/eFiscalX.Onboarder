@@ -24,7 +24,7 @@ namespace eFiscalX.Onboarder
                 NUI = ulong.Parse(txtNui.Text.Trim()),
                 FiscalizationNo = txtFiscalizationNo.Text.Trim(),
                 PosId = ulong.Parse(txtPosId.Text.Trim()),
-                BranchNo = ulong.Parse(txtBranchId.Text.Trim()),
+                BranchId = ulong.Parse(txtBranchId.Text.Trim()),
                 ApplicationId = ulong.Parse(txtAppId.Text.Trim())
             };
 
@@ -46,7 +46,7 @@ namespace eFiscalX.Onboarder
                     BusinessId = onBoardRequest.NUI,
                     BusinessName = verificationCode.BusinessName,
                     Country = "RKS",
-                    BranchId = onBoardRequest.BranchNo,
+                    BranchId = onBoardRequest.BranchId,
                     PosId = onBoardRequest.PosId,
                 };
 
@@ -60,7 +60,7 @@ namespace eFiscalX.Onboarder
                 {
                     BusinessName = verificationCode.BusinessName,
                     BusinessId = onBoardRequest.NUI,
-                    BranchId = onBoardRequest.BranchNo,
+                    BranchId = onBoardRequest.BranchId,
                     VerificationNo = verificationCode.VerificationCode,
                     PosId = onBoardRequest.PosId,
                     ApplicationId = onBoardRequest.ApplicationId,
