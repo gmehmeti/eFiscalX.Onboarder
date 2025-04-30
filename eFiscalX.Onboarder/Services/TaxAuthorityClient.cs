@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eFiscalX.Onboarder
+namespace eFiscalX.Onboarder.Services
 {
     public class TaxAuthorityClient
     {
@@ -16,7 +16,7 @@ namespace eFiscalX.Onboarder
         public TaxAuthorityClient(HttpClient httpClient, bool isProductionEnv)
         {
             _httpClient = httpClient;
-            this._isProductionEnv = isProductionEnv;
+            _isProductionEnv = isProductionEnv;
         }
 
         #region GetVerificationCodeAsync

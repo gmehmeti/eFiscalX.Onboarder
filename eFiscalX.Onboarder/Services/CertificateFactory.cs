@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace eFiscalX.Onboarder
+namespace eFiscalX.Onboarder.Services
 {
     public class CertificateFactory
     {
@@ -16,6 +16,7 @@ namespace eFiscalX.Onboarder
         {
             certificatesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Certificates");
         }
+
         private ECDsa GenerateEcdsaKey()
         {
             return ECDsa.Create(ECCurve.NamedCurves.nistP256);
@@ -37,8 +38,8 @@ namespace eFiscalX.Onboarder
             var csrPem = csrRequest.CreateSigningRequestPem();
 
             // 5: Save CSR and Private Key
-            var privateKeyPem = this.SavePrivateKeyToPem($"{model.BusinessId}_private_key.pem", ecdsaKey);
-            this.SaveCsrToPem($"{model.BusinessId}_csr.pem", csrPem);
+            var privateKeyPem = SavePrivateKeyToPem($"{model.BusinessId}_private_key.pem", ecdsaKey);
+            SaveCsrToPem($"{model.BusinessId}_csr.pem", csrPem);
 
             // 6. Return both private key and CSR
             return (privateKeyPem, csrPem);
@@ -49,6 +50,7 @@ namespace eFiscalX.Onboarder
             var fileName = Path.Combine(certificatesFolder, filePath);
             File.WriteAllText(fileName, csrPem);
         }
+
         private string SavePrivateKeyToPem(string filePath, ECDsa ecdsaKey)
         {
             string privateKeyPem = ecdsaKey.ExportECPrivateKeyPem();
@@ -75,7 +77,7 @@ namespace eFiscalX.Onboarder
             var certWithKey = certificate.CopyWithPrivateKey(privateKey);
 
             // Export to PFX
-            string pfxPassword = "Admin1!";
+            string pfxPassword = "StrongPassword1!"; //Always use a STRONG PASSWORD when exporting a PFX
 
             byte[] pfxBytes = certWithKey.Export(X509ContentType.Pfx, pfxPassword);
 

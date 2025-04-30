@@ -237,7 +237,6 @@
             btnReset.TabIndex = 11;
             btnReset.Text = "Reset";
             btnReset.UseVisualStyleBackColor = false;
-            btnReset.Click += btnReset_Click;
             // 
             // btnOnboard
             // 

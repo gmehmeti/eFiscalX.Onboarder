@@ -1,3 +1,4 @@
+using eFiscalX.Onboarder.Services;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -10,13 +11,15 @@ namespace eFiscalX.Onboarder
             InitializeComponent();
         }
 
+        #region Onboard Click
+
         private async void btnOnboard_Click(object sender, EventArgs e)
         {
             if (!ValidateAllFields())
                 return;
 
             this.lblTitle.Text = lblStatus.Text = string.Empty;
-            this.rtxtSignedCertificate.Text = this.rtxtCertificate.Text = this.rtxtPrivateKey.Text =  string.Empty;
+            this.rtxtSignedCertificate.Text = this.rtxtCertificate.Text = this.rtxtPrivateKey.Text = string.Empty;
 
             bool isProdEnv = rdbProdEnv.Checked;
             var onBoardRequest = new OnboardRequest
@@ -53,7 +56,7 @@ namespace eFiscalX.Onboarder
                 var (privateKeyPem, csrPem) = certFactory.CreateCertificateSigningRequest(csrRequest);
                 LogMessage("Private Key and CSR generated successfully (ECDSA P-256).");
                 rtxtPrivateKey.Text = privateKeyPem;
-                rtxtCertificate.Text    = csrPem;
+                rtxtCertificate.Text = csrPem;
 
                 var signCsrRequest = new SignCsrRequest
                 {
@@ -75,7 +78,7 @@ namespace eFiscalX.Onboarder
 
                 certFactory.SaveSignedCertificatePfx($"{onBoardRequest.NUI}_signed_certificate.pfx", privateKeyPem, signedCert.SignedCertificate);
                 LogMessage($"Exported signed certificate and private key to PFX.");
-                
+
                 lblStatus.Text = "Fiscalization onboarding finalized";
             }
             catch (Exception ex)
@@ -83,12 +86,9 @@ namespace eFiscalX.Onboarder
                 MessageBox.Show($"Error: {ex.Message}");
                 LogMessage($"Error: {ex.Message}");
             }
-        }
+        } 
 
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-
-        }
+        #endregion
 
         #region ValidateAllFields
 
@@ -135,9 +135,13 @@ namespace eFiscalX.Onboarder
 
         #endregion
 
+        #region LogMessage
+
         private void LogMessage(string message)
         {
             this.rtxtLog.AppendText(message + Environment.NewLine);
-        }
+        } 
+
+        #endregion
     }
 }
