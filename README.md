@@ -2,6 +2,7 @@
 
 **eFiscalX.Onboarder** is a C#/.NET-based onboarding service developed as part of the eFiscalX platform. It is designed to simplify, automate and streamline the integration of new clients or entities into the fiscalization ecosystem.
 
+![Alt text](./mainscreen.png)
 ---
 
 ## Features
