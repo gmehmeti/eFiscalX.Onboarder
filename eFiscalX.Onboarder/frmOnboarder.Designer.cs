@@ -58,6 +58,7 @@
             statusStrip1 = new StatusStrip();
             tsslName = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
+            lblMessageLogs = new Label();
             tabControl.SuspendLayout();
             tabOnboarding.SuspendLayout();
             tabCertificate.SuspendLayout();
@@ -81,6 +82,7 @@
             // 
             // tabOnboarding
             // 
+            tabOnboarding.Controls.Add(lblMessageLogs);
             tabOnboarding.Controls.Add(rtxtLog);
             tabOnboarding.Controls.Add(rdbProdEnv);
             tabOnboarding.Controls.Add(rdbTestEnv);
@@ -107,9 +109,9 @@
             // rtxtLog
             // 
             rtxtLog.BorderStyle = BorderStyle.None;
-            rtxtLog.Location = new Point(819, 87);
+            rtxtLog.Location = new Point(819, 90);
             rtxtLog.Name = "rtxtLog";
-            rtxtLog.Size = new Size(366, 390);
+            rtxtLog.Size = new Size(366, 387);
             rtxtLog.TabIndex = 16;
             rtxtLog.Text = "";
             // 
@@ -139,7 +141,7 @@
             // 
             lblTitle.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             lblTitle.ForeColor = Color.Blue;
-            lblTitle.Location = new Point(25, 20);
+            lblTitle.Location = new Point(25, 10);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(1084, 46);
             lblTitle.TabIndex = 0;
@@ -369,6 +371,15 @@
             toolStripStatusLabel2.Size = new Size(357, 47);
             toolStripStatusLabel2.Text = "gazmendmehmeti@gmail.com";
             // 
+            // lblMessageLogs
+            // 
+            lblMessageLogs.AutoSize = true;
+            lblMessageLogs.Location = new Point(820, 64);
+            lblMessageLogs.Name = "lblMessageLogs";
+            lblMessageLogs.Size = new Size(102, 20);
+            lblMessageLogs.TabIndex = 17;
+            lblMessageLogs.Text = "Message Logs";
+            // 
             // frmOnboarder
             // 
             ClientSize = new Size(1212, 574);
@@ -421,5 +432,6 @@
         private Label lblCertificate;
         private Label label2;
         private RichTextBox rtxtSignedCertificate;
+        private Label lblMessageLogs;
     }
 }
