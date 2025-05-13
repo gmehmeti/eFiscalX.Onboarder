@@ -29,7 +29,7 @@ namespace eFiscalX.Onboarder.Services
 
             // 2. Build Distinguished Name (DN)
             string businessName = CleanX500Name(model.BusinessName);
-            string dn = $"C=RKS, O={model.BusinessId}, OU={model.PosId}, L={model.BranchId}, CN={businessName}";           
+            string dn = $"C={model.Country}, O={model.BusinessId}, OU={model.PosId}, L={model.BranchId}, CN={businessName}";           
             var subjectName = new X500DistinguishedName(dn);
             
             // 3. Create CertificateRequest with ECDSA key
