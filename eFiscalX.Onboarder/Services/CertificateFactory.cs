@@ -28,7 +28,8 @@ namespace eFiscalX.Onboarder.Services
             var ecdsaKey = GenerateEcdsaKey();
 
             // 2. Build Distinguished Name (DN)
-            string dn = $"C=RKS, O={model.BusinessId}, OU={model.PosId}, L={model.BranchId}, CN={model.BusinessName}";           
+            string businessName = CleanX500Name(model.BusinessName);
+            string dn = $"C=RKS, O={model.BusinessId}, OU={model.PosId}, L={model.BranchId}, CN={businessName}";           
             var subjectName = new X500DistinguishedName(dn);
             
             // 3. Create CertificateRequest with ECDSA key
@@ -44,6 +45,28 @@ namespace eFiscalX.Onboarder.Services
             // 6. Return both private key and CSR
             return (privateKeyPem, csrPem);
         }
+
+        #region CleanX500Name
+
+        private static string CleanX500Name(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
+            // Trim and normalize spaces
+            string cleaned = input.Trim();
+            cleaned = System.Text.RegularExpressions.Regex.Replace(cleaned, @"\s{2,}", " ");
+
+            // Only allow alphanumerics, dots, hyphens, underscores, and spaces
+            // Remove anything else
+            cleaned = System.Text.RegularExpressions.Regex.Replace(cleaned, @"[^a-zA-Z0-9.\-_ ]", "");
+            cleaned = System.Text.RegularExpressions.Regex.Replace(cleaned, @"\s{2,}", " ");
+            cleaned = cleaned.Trim();
+
+            return cleaned;
+        } 
+
+        #endregion
 
         private void SaveCsrToPem(string filePath, string csrPem)
         {

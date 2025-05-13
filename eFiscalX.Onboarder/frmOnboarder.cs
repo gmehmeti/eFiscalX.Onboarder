@@ -48,7 +48,7 @@ namespace eFiscalX.Onboarder
                 {
                     BusinessId = onBoardRequest.NUI,
                     BusinessName = verificationCode.BusinessName,
-                    Country = "RKS",
+                    Country = "XK",
                     BranchId = onBoardRequest.BranchId,
                     PosId = onBoardRequest.PosId,
                 };
@@ -63,7 +63,7 @@ namespace eFiscalX.Onboarder
                     BusinessName = verificationCode.BusinessName,
                     BusinessId = onBoardRequest.NUI,
                     BranchId = onBoardRequest.BranchId,
-                    VerificationNo = verificationCode.VerificationCode,
+                    VerificationCode = verificationCode.VerificationCode,
                     PosId = onBoardRequest.PosId,
                     ApplicationId = onBoardRequest.ApplicationId,
                     Csr = csrPem

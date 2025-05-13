@@ -18,7 +18,7 @@ namespace eFiscalX.Onboarder
         [JsonProperty("pos_id")]
         public ulong PosId { get; set; }
 
-        [JsonProperty("branch_no")]
+        [JsonProperty("branch_id")]
         public ulong BranchId { get; set; }
 
         [JsonProperty("application_id")]
@@ -32,7 +32,7 @@ namespace eFiscalX.Onboarder
         public string BusinessName { get; set; }
 
         [JsonProperty("verification_code")]
-        public ulong VerificationCode { get; set; }
+        public string VerificationCode { get; set; }
 
         [JsonProperty("error")]
         public Error Error { get; set; }
@@ -59,8 +59,8 @@ namespace eFiscalX.Onboarder
         [JsonProperty("branch_id")]
         public ulong BranchId { get; set; }
 
-        [JsonProperty("verification_no")]
-        public ulong VerificationNo { get; set; }
+        [JsonProperty("verification_code")]
+        public string VerificationCode { get; set; }
 
         [JsonProperty("pos_id")]
         public ulong PosId { get; set; }
@@ -84,7 +84,7 @@ namespace eFiscalX.Onboarder
 
     public class CsrRequest
     {
-        public string Country { get; set; } = "RKS";
+        public string Country { get; set; } = "XK";
         public string BusinessName { get; set; }
         public ulong BusinessId { get; set; }
         public ulong BranchId { get; set; }
